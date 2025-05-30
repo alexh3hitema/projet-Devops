@@ -1,0 +1,45 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Nettoyage du workspace') {
+            steps {
+                script {
+                    // Nettoyage du dossier workspace en supprimant tous les fichiers
+                    echo 'Nettoyage du workspace...'
+                    sh 'rm -rf $WORKSPACE/*'
+                }
+            }
+        }
+
+        stage('Cloner le dépôt GitHub') {
+            steps {
+                script {
+                    // Cloner le dépôt GitHub
+                    echo 'Clonage du dépôt GitHub...'
+                    git url: 'https://github.com/alexh3hitema/projet-Devops', branch: 'main'
+                }
+            }
+        }
+
+        stage('Vérification du clone') {
+            steps {
+                script {
+                    // Vérification de l'arborescence après le clonage
+                    echo 'Vérification du clonage du dépôt...'
+                    sh 'ls -l'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Le dépôt GitHub a été cloné avec succès.'
+        }
+        failure {
+            echo 'Une erreur est survenue lors du nettoyage ou du clonage.'
+        }
+    }
+}
+ 
